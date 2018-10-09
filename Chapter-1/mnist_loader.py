@@ -5,8 +5,8 @@ import numpy as np
 
 
 def load_data():
-    f = gzip.open('/Chapter-1/mnist.pkl.gz', 'rb')
-    training_data, validation_data, test_data = cPickle.load(f)
+    f = gzip.open('mnist.pkl.gz', 'rb')
+    training_data, validation_data, test_data = cPickle.load(f, encoding = 'latin1')
     f.close()
 
     return (training_data, validation_data, test_data)

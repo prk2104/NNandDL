@@ -24,9 +24,9 @@ class Network(object):
 
     def SGD(self, training_data, epochs, mini_batch_size, eta, test_data=None):
         if test_data:
-            n_test = len(test_data)
+            n_test = len(list(test_data))
 
-        n = len(training_data)
+        n = len(list(training_data))
 
         for i in range(epochs):
             random.shuffle(training_data)
@@ -38,8 +38,7 @@ class Network(object):
                 self.update_mini_batch(mini_batch, eta)
 
             if test_data:
-                print("Epoch {0}: {1}/{2}".format(i,
-                                                  self.evaluate(test_data), n_test))
+                print("Epoch {0}: {1}/{2}".format(i,self.evaluate(test_data), n_test))
             else:
                 print("Epoch {0} complete.".format(i))
 
@@ -53,7 +52,7 @@ class Network(object):
             nabla_w = [nw + dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
 
         self.biases = [b - (eta/len(nabla_b))*nb for b, nb in zip(self.biases, nabla_b)]
-        self.weights = [w - (eta/len(nabla_w)*nw for w, nw in zip(self.weights, nabla_w))]
+        self.weights = [w - (eta/len(nabla_w))*nw for w, nw in zip(self.weights, nabla_w)]
 
     def backprop(self, x, y):
         nabla_b = [np.zeros(b.shape) for b in self.biases]
@@ -85,7 +84,7 @@ class Network(object):
 
 
     def evaluate(self, test_data):
-        test_results = [(np.argmax(self.feedforward(x), y)) for (x, y) in test_data]
+        test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
 
         return sum(int(x == y) for (x, y) in test_results)
 
